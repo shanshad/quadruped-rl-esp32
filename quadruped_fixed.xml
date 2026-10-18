@@ -1,0 +1,661 @@
+<mujoco model="leg">
+    <compiler angle="radian" meshdir="meshes"/>
+    <option integrator="implicitfast" timestep="0.002" solver="Newton" iterations="40" ls_iterations="20" cone="pyramidal" gravity="0 0 -9.81"/>
+
+    <default>
+        <joint damping="0.02" armature="0.001"/>
+        <geom contype="0" conaffinity="0"/>
+    </default>
+
+    <asset>
+        <mesh name="thigh" file="thigh.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_ZK_122" file="ST3215-Servo_SCS215-v6_7_ZK_122.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" file="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" file="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" file="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" file="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_GE_27" file="ST3215-Servo_SCS215-v6_7_GE_27.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong" file="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong" file="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="shank" file="shank.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="triangle" file="triangle.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="l-t-s" file="l-t-s.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="dew" file="dew.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="l2" file="l2.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="torso" file="torso.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="dew_right" file="dew_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="l-t-s_right" file="l-t-s_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="shank_right" file="shank_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="thigh_right" file="thigh_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="triangle_right" file="triangle_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="l2_right" file="l2_right.stl" scale="0.001 0.001 0.001"/>
+        <mesh name="imu" file="imu.stl" scale="0.001 0.001 0.001"/>
+    </asset>
+
+    <worldbody>
+        <light directional="true" pos="-0.5 0.5 3" dir="0 0 -1"/>
+        <geom name="floor" pos="0 0 0" size="5 5 0.1" friction="1.0 0.005 0.0001" type="plane" rgba="1 0.83 0.61 0.5" contype="1" conaffinity="1"/>
+
+        <!-- ===================== TORSO ===================== -->
+        <body name="torso" pos="0 0 0.2" euler="0 0 0">
+            <freejoint name="root"/>
+            
+            <geom name="torso_geom" type="mesh" mesh="torso"/>
+            <inertial mass="0.358881 " pos="-0.000121 -0.000065 0.00568"
+                      fullinertia="0.000707700 0.001742000 0.002433000 0.000002014659 0.000000674816 0.000000380536"/>
+            <body name="imu" pos="0 0 0.021" euler="0 0 0">
+                <geom name="imu_geom" type="mesh" mesh="imu"/>
+                <inertial mass="0.0019774999999999994" pos="0.0 0.0 0.0025" fullinertia="0.000000747582 0.000003978189 0.000004662606 0.000000000238 -0.000000013247 0.000000000050"/>
+                <site name="imu_site" pos="0 0 0" size="0.005"/>
+            </body>
+
+
+            <!-- mount point: offsets the whole leg so ST3215-Servo_SCS215-v6_7_ZK_122 lands at
+                 (0.07263, 0.06, 0.01) in torso's frame, exactly as requested -->
+            <body name="leg_mount" pos="0.072 0.089 0.0455" euler="0 0 0">
+
+        <!-- ===================== SERVO 1 (hip, drives thigh) ===================== -->
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122"/>
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116692 -0.007691042312384673 0"
+                            fullinertia="1.4999637924752706e-06 5.095506425694643e-06 4.250129261834094e-06 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15"/>
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195105 0.001885684202337903 0"
+                            fullinertia="7.546661123067234e-07 2.89795614114708e-06 2.3089502528864977e-06 -5.481115859326685e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16"/>
+                    <inertial mass="0.01821643757889881" pos="-0.012822160928189785 -0.01931024018912989 0"
+                            fullinertia="1.107325926503662e-06 3.993024773287451e-06 3.261923026753187e-06 2.9471829809959506e-08 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_1" pos="-0.0155 -0.05 0" euler="0 0 -3.141592653589788">
+                        <geom name="jsdp_congdong_1_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong"/>
+                        <inertial mass="0.004443481253791742" pos="0.01 -0.023016391767442263 0"
+                                fullinertia="1.0943154192723672e-07 2.139017742057694e-07 1.0943154196578728e-07 0 0 0"/>
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" pos="-0.00125 -0.03245 -0.0255" euler="3.1415926535897927 0 3.141592653589793">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3"/>
+                    <inertial mass="0.008652907455643915" pos="0 0.011421256516785194 0"
+                            fullinertia="5.452617004822564e-07 3.104745033096637e-07 5.452708328338857e-07 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92"/>
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886415 -0.015644767695657914 5.9846080264537756e-05"
+                            fullinertia="8.213099986659632e-08 1.6858245949269002e-07 1.0571521803967374e-07 1.4750606237430265e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27" pos="0 -0.0156 0" euler="1.5707963267948954 0 -1.5707963267948986">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27"/>
+                    <inertial mass="0.0013506818103317562" pos="0 1.1050670457463107e-05 -0.004395367463835028"
+                            fullinertia="3.374018615225684e-08 3.375124164237053e-08 3.877003239050423e-08 0 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_1" pos="-0.01 0 0.0114" euler="-1.5707963267948966 0 0">
+                        <geom name="jsdp_qudong_1_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong"/>
+                        <inertial mass="0.0059458144206506495" pos="0.01 0.025397496937740852 0"
+                                fullinertia="1.3584595053821343e-07 2.5750846296304524e-07 1.3584597811950813e-07 0 0 0"/>
+
+                        <!-- === HIP ACTUATED JOINT: drives thigh === -->
+                        <body name="thigh" pos="0.01 0.027 0" euler="0 -1.5707963267948946 0">
+                            <joint name="hip_drive_joint" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                            <geom name="thigh_geom" type="mesh" mesh="thigh"/>
+                            <inertial mass="0.011" pos="-0.03494104354173418 0.002672141141860909 -0.035114004698524805"
+                                    fullinertia="0.000007385879 0.000014681843 0.000007374005 -0.000000011851 -0.000006948766 -0.000000012194"/>
+
+                            <body name="shank" pos="-0.07071067811865456 0.005 -0.07071067811865492" euler="0 0 0">
+                                <joint name="thigh_shank_joint" type="hinge" axis="0 1 0" pos="0 0.005 0"/>
+                                <geom name="shank_geom" type="mesh" mesh="shank"/>
+                                <inertial mass="0.011327" pos="0.03220962254531401 0.0025 -0.030542088346441183"
+                                        fullinertia="0.000008290671 0.000016783515 0.000008540042 0.000000000000 0.000008155978 0.000000000000"/>
+                                <!-- measured hole: closes loop 1 with l-t-s's far end -->
+                                <site name="shank_pivot" pos="-0.014496 0.005 0.014496" size="0.0015" rgba="0 1 0 1"/>
+                                <site name="foot_contact_LF" pos="0.070711 0.0025 -0.079711" size="0.008" rgba="0 1 0 1"/>
+                                <geom name="foot_geom_LF" type="sphere" size="0.008" pos="0.070711 0.0025 -0.079711" contype="1" conaffinity="0" friction="1.0 0.005 0.0001" rgba="1 0.2 0.2 1"/>
+                            </body>
+
+                            <body name="triangle" pos="0 0.005 0" euler="0 0 0">
+                                <joint name="thigh_triangle_joint" type="hinge" axis="0 1 0" pos="0 0.01 0"/>
+                                <geom name="triangle_geom" type="mesh" mesh="triangle"/>
+                                <inertial mass="0.02151631801423751" pos="-0.007217826852814267 0.0025 0.01785468151189869"
+                                        fullinertia="1.5610819398426089e-06 2.585907865289283e-06 1.1144772505059958e-06 0 5.642417051968505e-07 0"/>
+                                <site name="triangle_l2_pivot" pos="0 0.005 0.019256" size="0.0015" rgba="0 1 0 1"/>
+                                <!-- real branch of loop 1: l-t-s hinges to triangle at its near end -->
+                                <body name="l-t-s" pos="-0.009734893619144865 0.005 0.01925648440950359" euler="0 0 0">
+                                    <joint name="triangle_lts_joint" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                                    <geom name="l-t-s_geom" type="mesh" mesh="l-t-s"/>
+                                    <inertial mass="0.021529623305541288" pos="-0.03773573675692078 0.002 -0.0377357367569172"
+                                            fullinertia="1.079911555369394e-05 2.154081877848969e-05 1.0799115553610533e-05 0 -1.0699020166069949e-05 0"/>
+                                    <!-- measured far end (slot length 106.733 mm, hole at 2x COM offset): closes loop 1 with shank -->
+                                    <site name="lts_far_pivot" pos="-0.07547147351384156 -0.00000000000000002 -0.0754714735138344" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+                                <body name="l2" pos="0 0.005 0.019256484409503588" euler="0 0 0">
+                                    <joint name="triangle_l2_joint" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                                    <geom name="l2_geom" type="mesh" mesh="l2"/>
+                                    <inertial mass="0.005291543840237439" pos="0.013 0.0025 0.00495655885077039"
+                                            fullinertia="5.001006791915244e-08 3.7599043438964713e-07 3.480284658048163e-07 0 0 0"/>
+                                    <!-- far end: connects to dew, closes loop 2 -->
+                                    <site name="l2_triangle_pivot" pos="0 0 0" size="0.0015" rgba="1 0 0 1"/>
+                                    <site name="l2_dew_pivot" pos="0.026 0 0" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+
+                                <!-- real branch of loop 2: kept -->
+                                
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+        <!-- ===================== SERVO 2 (second actuator, drives dew) ===================== -->
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_2" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122"/>
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116692 -0.007691042312384673 0"
+                            fullinertia="1.499963792475269e-06 5.0955064256946395e-06 4.250129261834094e-06 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_2" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15"/>
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195103 0.001885684202337903 0"
+                            fullinertia="7.546661123067215e-07 2.897956141147078e-06 2.308950252886497e-06 -5.481115859326685e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_2" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16"/>
+                    <inertial mass="0.01821643757889881" pos="-0.012822160928189785 -0.01931024018912989 0"
+                            fullinertia="1.1073259265036536e-06 3.993024773287453e-06 3.2619230267531905e-06 2.9471829809960353e-08 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_2" pos="-0.0155 -0.05 0" euler="0 0 -3.141592653589788">
+                        <geom name="jsdp_congdong_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong"/>
+                        <inertial mass="0.004443481253791742" pos="0.01 -0.023016391767442263 0"
+                                fullinertia="1.0943154192723588e-07 2.1390177420577004e-07 1.0943154196578728e-07 0 0 0"/>
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_2" pos="0.02475 -0.03245 -0.0255" euler="3.1415926535897927 0 3.141592653589793">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3"/>
+                    <inertial mass="0.008652907455643915" pos="0 0.011421256516785194 0"
+                            fullinertia="5.452617004822564e-07 3.1047450330966453e-07 5.452708328338848e-07 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_2" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92"/>
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886415 -0.015644767695657914 5.984608026453876e-05"
+                            fullinertia="8.213099986659568e-08 1.6858245949269007e-07 1.0571521803967374e-07 1.4750606237430159e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_2" pos="0.026 -0.0156 0" euler="1.5707963267948954 0 -1.5707963267948986">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27"/>
+                    <inertial mass="0.0013506818103317562" pos="0 1.1050670457464835e-05 -0.004395367463835028"
+                            fullinertia="3.3740186152256604e-08 3.375124164237053e-08 3.877003239050431e-08 0 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_2" pos="-0.01 0 0.0114" euler="-1.5707963267948966 0 0">
+                        <geom name="jsdp_qudong_2_geom" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong"/>
+                        <inertial mass="0.0059458144206506495" pos="0.01 0.025397496937740852 0"
+                                fullinertia="1.358459505382137e-07 2.57508462963045e-07 1.3584597811950813e-07 0 0 0"/>
+
+                        <!-- === SECOND ACTUATED JOINT: drives dew === -->
+                        <body name="dew" pos="0.01 0.027 0" euler="0 -1.5707963267948961 0">
+                            <joint name="dew_drive_joint" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                            <geom name="dew_geom" type="mesh" mesh="dew"/>
+                            <inertial mass="0.014545966318095172" pos="0 0.0033725329098671123 0.003994656620903565"
+                                    fullinertia="9.503542221457631e-07 1.1224087768184931e-06 3.3743300458966465e-07 0 0 -1.0569736991071184e-07"/>
+
+                            <!-- loop-2 closure point on dew (duplicate l2 branch removed) -->
+                            <site name="dew_l2_pivot" pos="0 0.01 0.019256484409503536" size="0.0015" rgba="0 1 0 1"/>
+                                
+                        </body>
+                    </body>
+                </body>
+            </body>
+
+            <body name="leg_mount_BL" pos="-0.0975 0.089 0.0455" euler="0 0 0">
+
+                <!-- ===================== SERVO 1 (hip, drives thigh) ===================== -->
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_BL" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122"/>
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116692 -0.007691042312384673 0"
+                            fullinertia="1.4999637924752706e-06 5.095506425694643e-06 4.250129261834094e-06 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_BL" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15"/>
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195105 0.001885684202337903 0"
+                            fullinertia="7.546661123067234e-07 2.89795614114708e-06 2.3089502528864977e-06 -5.481115859326685e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_BL" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16"/>
+                    <inertial mass="0.01821643757889881" pos="-0.012822160928189785 -0.01931024018912989 0"
+                            fullinertia="1.107325926503662e-06 3.993024773287451e-06 3.261923026753187e-06 2.9471829809959506e-08 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_1_BL" pos="-0.0155 -0.05 0" euler="0 0 -3.141592653589788">
+                        <geom name="jsdp_congdong_1_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong"/>
+                        <inertial mass="0.004443481253791742" pos="0.01 -0.023016391767442263 0"
+                                fullinertia="1.0943154192723672e-07 2.139017742057694e-07 1.0943154196578728e-07 0 0 0"/>
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_BL" pos="-0.00125 -0.03245 -0.0255" euler="3.1415926535897927 0 3.141592653589793">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3"/>
+                    <inertial mass="0.008652907455643915" pos="0 0.011421256516785194 0"
+                            fullinertia="5.452617004822564e-07 3.104745033096637e-07 5.452708328338857e-07 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_BL" pos="0 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92"/>
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886415 -0.015644767695657914 5.9846080264537756e-05"
+                            fullinertia="8.213099986659632e-08 1.6858245949269002e-07 1.0571521803967374e-07 1.4750606237430265e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_BL" pos="0 -0.0156 0" euler="1.5707963267948954 0 -1.5707963267948986">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27"/>
+                    <inertial mass="0.0013506818103317562" pos="0 1.1050670457463107e-05 -0.004395367463835028"
+                            fullinertia="3.374018615225684e-08 3.375124164237053e-08 3.877003239050423e-08 0 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_1_BL" pos="-0.01 0 0.0114" euler="-1.5707963267948966 0 0">
+                        <geom name="jsdp_qudong_1_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong"/>
+                        <inertial mass="0.0059458144206506495" pos="0.01 0.025397496937740852 0"
+                                fullinertia="1.3584595053821343e-07 2.5750846296304524e-07 1.3584597811950813e-07 0 0 0"/>
+
+                        <!-- === HIP ACTUATED JOINT: drives thigh === -->
+                        <body name="thigh_BL" pos="0.01 0.027 0" euler="0 -1.5707963267948946 0">
+                            <joint name="hip_drive_joint_BL" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                            <geom name="thigh_geom_BL" type="mesh" mesh="thigh"/>
+                            <inertial mass="0.011" pos="-0.03494104354173418 0.002672141141860909 -0.035114004698524805"
+                                    fullinertia="0.000007385879 0.000014681843 0.000007374005 -0.000000011851 -0.000006948766 -0.000000012194"/>
+
+                            <body name="shank_BL" pos="-0.07071067811865456 0.005 -0.07071067811865492" euler="0 0 0">
+                                <joint name="thigh_shank_joint_BL" type="hinge" axis="0 1 0" pos="0 0.005  0"/>
+                                <geom name="shank_geom_BL" type="mesh" mesh="shank"/>
+                                <inertial mass="0.011327" pos="0.03220962254531401 0.0025 -0.030542088346441183"
+                                        fullinertia="0.000008290671 0.000016783515 0.000008540042 0.000000000000 0.000008155978 0.000000000000"/>
+                                <!-- measured hole: closes loop 1 with l-t-s's far end -->
+                                <site name="shank_pivot_BL" pos="-0.014496 0.005 0.014496" size="0.0015" rgba="0 1 0 1"/>
+                                <site name="foot_contact_BL" pos="0.070711 0.0025 -0.079711" size="0.008" rgba="0 1 0 1"/>
+                                <geom name="foot_geom_BL" type="sphere" size="0.008" pos="0.070711 0.0025 -0.079711" contype="1" conaffinity="0" friction="1.0 0.005 0.0001" rgba="1 0.2 0.2 1"/>
+                            </body>
+
+                            <body name="triangle_BL" pos="0 0.005 0" euler="0 0 0">
+                                <joint name="thigh_triangle_joint_BL" type="hinge" axis="0 1 0" pos="0 0.01 0"/>
+                                <geom name="triangle_geom_BL" type="mesh" mesh="triangle"/>
+                                <inertial mass="0.02151631801423751" pos="-0.007217826852814267 0.0025 0.01785468151189869"
+                                        fullinertia="1.5610819398426089e-06 2.585907865289283e-06 1.1144772505059958e-06 0 5.642417051968505e-07 0"/>
+                                <site name="triangle_l2_pivot_BL" pos="0 0.005 0.019256" size="0.0015" rgba="0 1 0 1"/>
+                                <!-- real branch of loop 1: l-t-s hinges to triangle at its near end -->
+                                <body name="l-t-s_BL" pos="-0.009734893619144865 0.005 0.01925648440950359" euler="0 0 0">
+                                    <joint name="triangle_lts_joint_BL" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                                    <geom name="l-t-s_geom_BL" type="mesh" mesh="l-t-s"/>
+                                    <inertial mass="0.021529623305541288" pos="-0.03773573675692078 0.002 -0.0377357367569172"
+                                            fullinertia="1.079911555369394e-05 2.154081877848969e-05 1.0799115553610533e-05 0 -1.0699020166069949e-05 0"/>
+                                    <!-- measured far end (slot length 106.733 mm, hole at 2x COM offset): closes loop 1 with shank -->
+                                    <site name="lts_far_pivot_BL" pos="-0.07547147351384156 -0.00000000000000002 -0.0754714735138344" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+                                <body name="l2_BL" pos="0 0.005 0.019256484409503588" euler="0 0 0">
+                                    <joint name="triangle_l2_joint_BL" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                                    <geom name="l2_geom_BL" type="mesh" mesh="l2"/>
+                                    <inertial mass="0.005291543840237439" pos="0.013 0.0025 0.00495655885077039"
+                                            fullinertia="5.001006791915244e-08 3.7599043438964713e-07 3.480284658048163e-07 0 0 0"/>
+                                    <!-- far end: connects to dew, closes loop 2 -->
+                                    <site name="l2_triangle_pivot_BL" pos="0 0 0" size="0.0015" rgba="1 0 0 1"/>
+                                    <site name="l2_dew_pivot_BL" pos="0.026 0 0" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+
+                                <!-- real branch of loop 2: kept -->
+                                
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <!-- ===================== SERVO 2 (second actuator, drives dew) ===================== -->
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_2_BL" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122"/>
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116692 -0.007691042312384673 0"
+                            fullinertia="1.499963792475269e-06 5.0955064256946395e-06 4.250129261834094e-06 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_2_BL" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15"/>
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195103 0.001885684202337903 0"
+                            fullinertia="7.546661123067215e-07 2.897956141147078e-06 2.308950252886497e-06 -5.481115859326685e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_2_BL" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16"/>
+                    <inertial mass="0.01821643757889881" pos="-0.012822160928189785 -0.01931024018912989 0"
+                            fullinertia="1.1073259265036536e-06 3.993024773287453e-06 3.2619230267531905e-06 2.9471829809960353e-08 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_2_BL" pos="-0.0155 -0.05 0" euler="0 0 -3.141592653589788">
+                        <geom name="jsdp_congdong_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong"/>
+                        <inertial mass="0.004443481253791742" pos="0.01 -0.023016391767442263 0"
+                                fullinertia="1.0943154192723588e-07 2.1390177420577004e-07 1.0943154196578728e-07 0 0 0"/>
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_2_BL" pos="0.02475 -0.03245 -0.0255" euler="3.1415926535897927 0 3.141592653589793">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3"/>
+                    <inertial mass="0.008652907455643915" pos="0 0.011421256516785194 0"
+                            fullinertia="5.452617004822564e-07 3.1047450330966453e-07 5.452708328338848e-07 0 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_2_BL" pos="0.026 -0.0096 -0.0255" euler="0 1.5707963267948948 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92"/>
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886415 -0.015644767695657914 5.984608026453876e-05"
+                            fullinertia="8.213099986659568e-08 1.6858245949269007e-07 1.0571521803967374e-07 1.4750606237430159e-08 0 0"/>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_2_BL" pos="0.026 -0.0156 0" euler="1.5707963267948954 0 -1.5707963267948986">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27"/>
+                    <inertial mass="0.0013506818103317562" pos="0 1.1050670457464835e-05 -0.004395367463835028"
+                            fullinertia="3.3740186152256604e-08 3.375124164237053e-08 3.877003239050431e-08 0 0 0"/>
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_2_BL" pos="-0.01 0 0.0114" euler="-1.5707963267948966 0 0">
+                        <geom name="jsdp_qudong_2_geom_BL" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong"/>
+                        <inertial mass="0.0059458144206506495" pos="0.01 0.025397496937740852 0"
+                                fullinertia="1.358459505382137e-07 2.57508462963045e-07 1.3584597811950813e-07 0 0 0"/>
+
+                        <!-- === SECOND ACTUATED JOINT: drives dew === -->
+                        <body name="dew_BL" pos="0.01 0.027 0" euler="0 -1.5707963267948961 0">
+                            <joint name="dew_drive_joint_BL" type="hinge" axis="0 1 0" pos="0 0 0"/>
+                            <geom name="dew_geom_BL" type="mesh" mesh="dew"/>
+                            <inertial mass="0.014545966318095172" pos="0 0.0033725329098671123 0.003994656620903565"
+                                    fullinertia="9.503542221457631e-07 1.1224087768184931e-06 3.3743300458966465e-07 0 0 -1.0569736991071184e-07"/>
+
+                            <!-- loop-2 closure point on dew (duplicate l2 branch removed) -->
+                            <site name="dew_l2_pivot_BL" pos="0 0.01 0.019256484409503536" size="0.0015" rgba="0 1 0 1"/>
+                                
+                        </body>
+                    </body>
+                </body>
+            </body>
+            <body name="right_leg_front_mount" pos="0.072 -0.089 0.0455" euler="0 0 0">
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_RF" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116641 -0.007691042312384665 4.083528206751291e-06" fullinertia="1.4999637924752511e-06 5.09550642569465e-06 4.25012926183405e-06 3.0912890321012356e-09 -1.387307024204833e-09 6.525183306643608e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_RF" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195053 0.0018856842023378998 -1.412331807228909e-06" fullinertia="7.546661123067167e-07 2.8979561411470776e-06 2.3089502528864736e-06 -5.481115859326672e-08 -1.8491388073015688e-10 5.7300558376181545e-11" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_RF" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.01821643757889881" pos="-0.01282216092818973 -0.01931024018912987 2.6190885241775195e-07" fullinertia="1.1073259265036337e-06 3.993024773287456e-06 3.261923026753139e-06 2.947182980995774e-08 -1.00798202583579e-10 1.7487894590006953e-11" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_RF" pos="-0.015499999999999865 -0.04999999999999989 -3.5958576159082004e-18" euler="1.9428902930940244e-16 -5.551115123125124e-17 -3.141592653589786">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.004443481253791742" pos="0.010000000000055183 -0.023016391767442183 -1.4292103183484471e-13" fullinertia="1.0943154192723717e-07 2.139017742057614e-07 1.0943154196576748e-07 8.246382074872708e-19 4.660044572096172e-19 -2.928648634838645e-19" />
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_RF" pos="0.001249999999999631 0.0324500000000008 -0.025499999999999585" euler="-3.1415926535897927 2.137179322403426e-15 1.3877787807813967e-17">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.008652907455643915" pos="2.063748943417955e-15 0.011421256516785185 -1.6250664748099345e-15" fullinertia="5.452617004822507e-07 3.1047450330966347e-07 5.452708328338785e-07 -2.285137777086431e-19 -3.5973945861036648e-19 -1.9980329772131803e-19" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_RF" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886409 -0.015644767695657896 5.984608026453076e-05" fullinertia="8.21309998665941e-08 1.685824594926912e-07 1.0571521803967072e-07 1.4750606237430122e-08 -7.205158375924943e-11 -2.1161095212844498e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_RF" pos="1.1004530620084562e-16 0.015600000000000265 2.1316282072803047e-16" euler="-1.5707963267948954 5.689893001203927e-16 1.5707963267948946">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0013506818103317562" pos="8.066565312486868e-09 1.1050670457464948e-05 -0.004395367463835024" fullinertia="3.374018615225647e-08 3.375124164237009e-08 3.877003239050416e-08 2.1234506594151225e-14 1.7713872005075725e-13 -1.023052645941426e-10" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_RF" pos="-0.009999999999999615 3.071848331259736e-16 0.011400000000000203" euler="-1.570796326794897 3.3306690738754617e-16 7.060324547225597e-16">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_geom_RF" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.0059458144206506495" pos="0.009999999570361136 0.025397496937740703 1.7434168875095036e-13" fullinertia="1.358459505381967e-07 2.575084629630412e-07 1.3584597811953145e-07 -6.488421855306702e-14 -4.0135964791920426e-19 2.810309362192091e-18" />
+                        <body name="thigh_RF" pos="0.01 0.027 0" euler="3.141592653589793 -1.5707963267948966 0">
+                            <joint name="hip_drive_joint_RF" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                            <geom name="thigh_geom_RF" type="mesh" mesh="thigh_right"/>
+                            <inertial mass="0.011" pos="-0.03494104354173418 0.002672141141860909 -0.035114004698524805"
+                                    fullinertia="0.000007300853 0.000014761055 0.000007546240 -0.000000000745 -0.000006987265 -0.000000000332"/>
+
+                            <body name="shank_RF" pos="-0.07071067811865456 -0.005 -0.07071067811865492" euler="0 0 0">
+                                <joint name="thigh_shank_joint_RF" type="hinge" axis="0 -1 0" pos="0 -0.005 0"/>
+                                <geom name="shank_geom_RF" type="mesh" mesh="shank_right"/>
+                                <inertial mass="0.0717100828925662" pos="0.03220962254531401 0.0025 -0.030542088346441183"
+                                        fullinertia="5.248529485043889e-05 0.00010625047596103795 5.406397312265146e-05 0 5.1632604699626983e-05 0"/>
+                                <!-- measured hole: closes loop 1 with l-t-s's far end -->
+                                <site name="shank_pivot_RF" pos="-0.014496 -0.005 0.014496" size="0.0015" rgba="0 1 0 1"/>
+                                <site name="foot_contact_RF" pos="0.070711 -0.0025 -0.079711" size="0.008" rgba="0 1 0 1"/>
+                                <geom name="foot_geom_RF" type="sphere" size="0.008" pos="0.070711 -0.0025 -0.079711" contype="1" conaffinity="0" friction="1.0 0.005 0.0001" rgba="1 0.2 0.2 1"/>
+                            </body>
+
+                            <body name="triangle_RF" pos="0 -0.005 0" euler="0 0 0">
+                                <joint name="thigh_triangle_joint_RF" type="hinge" axis="0 -1 0" pos="0 0.01 0"/>
+                                <geom name="triangle_geom_RF" type="mesh" mesh="triangle_right"/>
+                                <inertial mass="0.02151631801423751" pos="-0.007217826852814267 0.0025 0.01785468151189869"
+                                        fullinertia="1.5610819398426089e-06 2.585907865289283e-06 1.1144772505059958e-06 0 5.642417051968505e-07 0"/>
+                                <site name="triangle_l2_pivot_RF" pos="0 -0.005 0.019256" size="0.0015" rgba="0 1 0 1"/>
+                                <!-- <site name="triangle_lts_pivot_RF" pos="0.009735 0.00 0.019256" size="0.0015" rgba="0 1 0 1"/> -->
+                                
+                                <!-- real branch of loop 1: l-t-s hinges to triangle at its near end -->
+                                <body name="l-t-s_RF" pos="-0.009734893619144865 -0.005 0.01925648440950359" euler="0 0 0">
+                                    <joint name="triangle_lts_joint_RF" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                                    <geom name="l-t-s_geom_RF" type="mesh" mesh="l-t-s_right"/>
+                                    <inertial mass="0.021529623305541288" pos="-0.03773573675692078 0.002 -0.0377357367569172"
+                                            fullinertia="1.079911555369394e-05 2.154081877848969e-05 1.0799115553610533e-05 0 -1.0699020166069949e-05 0"/>
+                                    <!-- measured far end (slot length 106.733 mm, hole at 2x COM offset): closes loop 1 with shank -->
+                                    <site name="lts_far_pivot_RF" pos="-0.075471 0 -0.075471" size="0.0015" rgba="1 0 0 1"/>
+                                    <!-- <site name="lts_in_pivot_RF" pos="0 -0.004 0" size="0.0015" rgba="1 0 0 1"/> -->
+                                </body>
+                                <body name="l2_RF" pos="0 -0.005 0.019256484409503588" euler="0 0 0">
+                                    <joint name="triangle_l2_joint_RF" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                                    <geom name="l2_geom_RF" type="mesh" mesh="l2_right"/>
+                                    <inertial mass="0.005291543840237439" pos="0.013 0.0025 0.00495655885077039"
+                                            fullinertia="5.001006791915244e-08 3.7599043438964713e-07 3.480284658048163e-07 0 0 0"/>
+                                    <!-- far end: connects to dew, closes loop 2 -->
+                                    <site name="l2_triangle_pivot_RF" pos="0.0  -0.00 0" size="0.0015" rgba="1 0 0 1"/>
+                                    <site name="l2_dew_pivot_RF" pos="0.025913  -0.00 0" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+
+                                <!-- real branch of loop 2: kept -->
+                                
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_RF2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116641 -0.007691042312384665 4.083528206751291e-06" fullinertia="1.4999637924752511e-06 5.09550642569465e-06 4.25012926183405e-06 3.0912890321012356e-09 -1.387307024204833e-09 6.525183306643608e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_RF2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195053 0.0018856842023378998 -1.412331807228909e-06" fullinertia="7.546661123067167e-07 2.8979561411470776e-06 2.3089502528864736e-06 -5.481115859326672e-08 -1.8491388073015688e-10 5.7300558376181545e-11" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_RF2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.01821643757889881" pos="-0.01282216092818973 -0.01931024018912987 2.6190885241775195e-07" fullinertia="1.1073259265036337e-06 3.993024773287456e-06 3.261923026753139e-06 2.947182980995774e-08 -1.00798202583579e-10 1.7487894590006953e-11" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_RF2" pos="-0.015499999999999865 -0.04999999999999989 -3.5958576159082004e-18" euler="1.9428902930940244e-16 -5.551115123125124e-17 -3.141592653589786">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.004443481253791742" pos="0.010000000000055183 -0.023016391767442183 -1.4292103183484471e-13" fullinertia="1.0943154192723717e-07 2.139017742057614e-07 1.0943154196576748e-07 8.246382074872708e-19 4.660044572096172e-19 -2.928648634838645e-19" />
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_RF2" pos="0.001249999999999631 0.0324500000000008 -0.025499999999999585" euler="-3.1415926535897927 2.137179322403426e-15 1.3877787807813967e-17">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.008652907455643915" pos="2.063748943417955e-15 0.011421256516785185 -1.6250664748099345e-15" fullinertia="5.452617004822507e-07 3.1047450330966347e-07 5.452708328338785e-07 -2.285137777086431e-19 -3.5973945861036648e-19 -1.9980329772131803e-19" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_RF2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886409 -0.015644767695657896 5.984608026453076e-05" fullinertia="8.21309998665941e-08 1.685824594926912e-07 1.0571521803967072e-07 1.4750606237430122e-08 -7.205158375924943e-11 -2.1161095212844498e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_RF2" pos="0.026 0.015600000000000265 2.1316282072803047e-16" euler="-1.5707963267948954 5.689893001203927e-16 1.5707963267948946">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0013506818103317562" pos="8.066565312486868e-09 1.1050670457464948e-05 -0.004395367463835024" fullinertia="3.374018615225647e-08 3.375124164237009e-08 3.877003239050416e-08 2.1234506594151225e-14 1.7713872005075725e-13 -1.023052645941426e-10" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_RF2" pos="-0.009999999999999615 3.071848331259736e-16 0.011400000000000203" euler="-1.570796326794897 3.3306690738754617e-16 7.060324547225597e-16">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_geom_RF2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.0059458144206506495" pos="0.009999999570361136 0.025397496937740703 1.7434168875095036e-13" fullinertia="1.358459505381967e-07 2.575084629630412e-07 1.3584597811953145e-07 -6.488421855306702e-14 -4.0135964791920426e-19 2.810309362192091e-18" />
+                        <body name="dew_RF" pos="0.01 0.027 0" euler="3.141592653589793 -1.5707963267948966 0">
+                            <joint name="dew_drive_joint_RF" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                            <geom name="dew_geom_RF" type="mesh" mesh="dew_right"/>
+                            <inertial mass="0.014545966318095172" pos="0 0.0033725329098671123 0.003994656620903565"
+                                    fullinertia="9.503542221457631e-07 1.1224087768184931e-06 3.3743300458966465e-07 0 0 -1.0569736991071184e-07"/>
+                            <site name="dew_l2_pivot_RF" pos="0 -0.01 0.019256484409503536" size="0.0015" rgba="0 1 0 1"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+                
+
+            <body name="right_leg_back_mount" pos="-0.0975 -0.089 0.0455" euler="0 0 0">
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_RB" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116641 -0.007691042312384665 4.083528206751291e-06" fullinertia="1.4999637924752511e-06 5.09550642569465e-06 4.25012926183405e-06 3.0912890321012356e-09 -1.387307024204833e-09 6.525183306643608e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_RB" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195053 0.0018856842023378998 -1.412331807228909e-06" fullinertia="7.546661123067167e-07 2.8979561411470776e-06 2.3089502528864736e-06 -5.481115859326672e-08 -1.8491388073015688e-10 5.7300558376181545e-11" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_RB" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.01821643757889881" pos="-0.01282216092818973 -0.01931024018912987 2.6190885241775195e-07" fullinertia="1.1073259265036337e-06 3.993024773287456e-06 3.261923026753139e-06 2.947182980995774e-08 -1.00798202583579e-10 1.7487894590006953e-11" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_RB" pos="-0.015499999999999865 -0.04999999999999989 -3.5958576159082004e-18" euler="1.9428902930940244e-16 -5.551115123125124e-17 -3.141592653589786">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.004443481253791742" pos="0.010000000000055183 -0.023016391767442183 -1.4292103183484471e-13" fullinertia="1.0943154192723717e-07 2.139017742057614e-07 1.0943154196576748e-07 8.246382074872708e-19 4.660044572096172e-19 -2.928648634838645e-19" />
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_RB" pos="0.001249999999999631 0.0324500000000008 -0.025499999999999585" euler="-3.1415926535897927 2.137179322403426e-15 1.3877787807813967e-17">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.008652907455643915" pos="2.063748943417955e-15 0.011421256516785185 -1.6250664748099345e-15" fullinertia="5.452617004822507e-07 3.1047450330966347e-07 5.452708328338785e-07 -2.285137777086431e-19 -3.5973945861036648e-19 -1.9980329772131803e-19" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_RB" pos="0 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886409 -0.015644767695657896 5.984608026453076e-05" fullinertia="8.21309998665941e-08 1.685824594926912e-07 1.0571521803967072e-07 1.4750606237430122e-08 -7.205158375924943e-11 -2.1161095212844498e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_RB" pos="1.1004530620084562e-16 0.015600000000000265 2.1316282072803047e-16" euler="-1.5707963267948954 5.689893001203927e-16 1.5707963267948946">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0013506818103317562" pos="8.066565312486868e-09 1.1050670457464948e-05 -0.004395367463835024" fullinertia="3.374018615225647e-08 3.375124164237009e-08 3.877003239050416e-08 2.1234506594151225e-14 1.7713872005075725e-13 -1.023052645941426e-10" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_RB" pos="-0.009999999999999615 3.071848331259736e-16 0.011400000000000203" euler="-1.570796326794897 3.3306690738754617e-16 7.060324547225597e-16">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_geom_RB" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.0059458144206506495" pos="0.009999999570361136 0.025397496937740703 1.7434168875095036e-13" fullinertia="1.358459505381967e-07 2.575084629630412e-07 1.3584597811953145e-07 -6.488421855306702e-14 -4.0135964791920426e-19 2.810309362192091e-18" />
+                        <body name="thigh_RB" pos="0.01 0.027 0" euler="3.141592653589793 -1.5707963267948966 0">
+                            <joint name="hip_drive_joint_RB" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                            <geom name="thigh_geom_RB" type="mesh" mesh="thigh_right"/>
+                            <inertial mass="0.011" pos="-0.03494104354173418 0.002672141141860909 -0.035114004698524805"
+                                    fullinertia="0.000007300853 0.000014761055 0.000007546240 -0.000000000745 -0.000006987265 -0.000000000332"/>
+
+                            <body name="shank_RB" pos="-0.07071067811865456 -0.005 -0.07071067811865492" euler="0 0 0">
+                                <joint name="thigh_shank_joint_RB" type="hinge" axis="0 -1 0" pos="0 -0.005 0"/>
+                                <geom name="shank_geom_RB" type="mesh" mesh="shank_right"/>
+                                <inertial mass="0.0717100828925662" pos="0.03220962254531401 0.0025 -0.030542088346441183"
+                                        fullinertia="5.248529485043889e-05 0.00010625047596103795 5.406397312265146e-05 0 5.1632604699626983e-05 0"/>
+                                <!-- measured hole: closes loop 1 with l-t-s's far end -->
+                                <site name="shank_pivot_RB" pos="-0.014496 -0.005 0.014496" size="0.0015" rgba="0 1 0 1"/>
+                                <site name="foot_contact_RB" pos="0.070711 -0.0025 -0.079711" size="0.008" rgba="0 1 0 1"/>
+                                <geom name="foot_geom_RB" type="sphere" size="0.008" pos="0.070711 -0.0025 -0.079711" contype="1" conaffinity="0" friction="1.0 0.005 0.0001" rgba="1 0.2 0.2 1"/>
+                            </body>
+
+                            <body name="triangle_RB" pos="0 -0.005 0" euler="0 0 0">
+                                <joint name="thigh_triangle_joint_RB" type="hinge" axis="0 -1 0" pos="0 0.01 0"/>
+                                <geom name="triangle_geom_RB" type="mesh" mesh="triangle_right"/>
+                                <inertial mass="0.02151631801423751" pos="-0.007217826852814267 0.0025 0.01785468151189869"
+                                        fullinertia="1.5610819398426089e-06 2.585907865289283e-06 1.1144772505059958e-06 0 5.642417051968505e-07 0"/>
+                                <site name="triangle_l2_pivot_RB" pos="0 -0.005 0.019256" size="0.0015" rgba="0 1 0 1"/>
+                                <!-- <site name="triangle_lts_pivot_RB" pos="0.009735 0.00 0.019256" size="0.0015" rgba="0 1 0 1"/> -->
+                                
+                                <!-- real branch of loop 1: l-t-s hinges to triangle at its near end -->
+                                <body name="l-t-s_RB" pos="-0.009734893619144865 -0.005 0.01925648440950359" euler="0 0 0">
+                                    <joint name="triangle_lts_joint_RB" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                                    <geom name="l-t-s_geom_RB" type="mesh" mesh="l-t-s_right"/>
+                                    <inertial mass="0.021529623305541288" pos="-0.03773573675692078 0.002 -0.0377357367569172"
+                                            fullinertia="1.079911555369394e-05 2.154081877848969e-05 1.0799115553610533e-05 0 -1.0699020166069949e-05 0"/>
+                                    <site name="lts_far_pivot_RB" pos="-0.075471 0 -0.075471" size="0.0015" rgba="1 0 0 1"/>
+                                    <!-- <site name="lts_in_pivot_RB" pos="0 -0.004 0" size="0.0015" rgba="1 0 0 1"/> -->
+                                </body>
+                                <body name="l2_RB" pos="0 -0.005 0.019256484409503588" euler="0 0 0">
+                                    <joint name="triangle_l2_joint_RB" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                                    <geom name="l2_geom_RB" type="mesh" mesh="l2_right"/>
+                                    <inertial mass="0.005291543840237439" pos="0.013 0.0025 0.00495655885077039"
+                                            fullinertia="5.001006791915244e-08 3.7599043438964713e-07 3.480284658048163e-07 0 0 0"/>
+                                    <!-- far end: connects to dew, closes loop 2 -->
+                                    <site name="l2_triangle_pivot_RB" pos="0.0  -0.00 0" size="0.0015" rgba="1 0 0 1"/>
+                                    <site name="l2_dew_pivot_RB" pos="0.025913  -0.00 0" size="0.0015" rgba="1 0 0 1"/>
+                                </body>
+
+                                <!-- real branch of loop 2: kept -->
+                                
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <body name="ST3215-Servo_SCS215-v6_7_ZK_122_RB2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_ZK_122_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_ZK_122" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.02333262594566815" pos="-0.012872959021116641 -0.007691042312384665 4.083528206751291e-06" fullinertia="1.4999637924752511e-06 5.09550642569465e-06 4.25012926183405e-06 3.0912890321012356e-09 -1.387307024204833e-09 6.525183306643608e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_RB2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_SG-ZIJI_15" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.013957938360593272" pos="-0.011997414778195053 0.0018856842023378998 -1.412331807228909e-06" fullinertia="7.546661123067167e-07 2.8979561411470776e-06 2.3089502528864736e-06 -5.481115859326672e-08 -1.8491388073015688e-10 5.7300558376181545e-11" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_RB2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_XG-ZIJI_16" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.01821643757889881" pos="-0.01282216092818973 -0.01931024018912987 2.6190885241775195e-07" fullinertia="1.1073259265036337e-06 3.993024773287456e-06 3.261923026753139e-06 2.947182980995774e-08 -1.00798202583579e-10 1.7487894590006953e-11" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_RB2" pos="-0.015499999999999865 -0.04999999999999989 -3.5958576159082004e-18" euler="1.9428902930940244e-16 -5.551115123125124e-17 -3.141592653589786">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_CongDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.004443481253791742" pos="0.010000000000055183 -0.023016391767442183 -1.4292103183484471e-13" fullinertia="1.0943154192723717e-07 2.139017742057614e-07 1.0943154196576748e-07 8.246382074872708e-19 4.660044572096172e-19 -2.928648634838645e-19" />
+                    </body>
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_RB2" pos="0.001249999999999631 0.0324500000000008 -0.025499999999999585" euler="-3.1415926535897927 2.137179322403426e-15 1.3877787807813967e-17">
+                    <geom name="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_MOTOR-1723_3" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.008652907455643915" pos="2.063748943417955e-15 0.011421256516785185 -1.6250664748099345e-15" fullinertia="5.452617004822507e-07 3.1047450330966347e-07 5.452708328338785e-07 -2.285137777086431e-19 -3.5973945861036648e-19 -1.9980329772131803e-19" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_RB2" pos="0.026 0.009600000000001177 -0.025499999999999728" euler="3.1415926535897927 -1.5707963267948946 0">
+                    <geom name="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_PCB-CHAZUO_92" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0020265849767849525" pos="-0.01572164591886409 -0.015644767695657896 5.984608026453076e-05" fullinertia="8.21309998665941e-08 1.685824594926912e-07 1.0571521803967072e-07 1.4750606237430122e-08 -7.205158375924943e-11 -2.1161095212844498e-10" />
+                </body>
+                <body name="ST3215-Servo_SCS215-v6_7_GE_27_RB2" pos="0.026 0.015600000000000265 2.1316282072803047e-16" euler="-1.5707963267948954 5.689893001203927e-16 1.5707963267948946">
+                    <geom name="ST3215-Servo_SCS215-v6_7_GE_27_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_GE_27" pos="0 0 0" euler="0 0 0" />
+                    <inertial mass="0.0013506818103317562" pos="8.066565312486868e-09 1.1050670457464948e-05 -0.004395367463835024" fullinertia="3.374018615225647e-08 3.375124164237009e-08 3.877003239050416e-08 2.1234506594151225e-14 1.7713872005075725e-13 -1.023052645941426e-10" />
+                    <body name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_RB2" pos="-0.009999999999999615 3.071848331259736e-16 0.011400000000000203" euler="-1.570796326794897 3.3306690738754617e-16 7.060324547225597e-16">
+                        <geom name="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong_geom_RB2" type="mesh" mesh="ST3215-Servo_SCS215-v6_7_JinShuDuoPan_QuDong" pos="0 0 0" euler="0 0 0" />
+                        <inertial mass="0.0059458144206506495" pos="0.009999999570361136 0.025397496937740703 1.7434168875095036e-13" fullinertia="1.358459505381967e-07 2.575084629630412e-07 1.3584597811953145e-07 -6.488421855306702e-14 -4.0135964791920426e-19 2.810309362192091e-18" />
+                        <body name="dew_RB" pos="0.01 0.027 0" euler="3.141592653589793 -1.5707963267948966 0">
+                            <joint name="dew_drive_joint_RB" type="hinge" axis="0 -1 0" pos="0 0 0"/>
+                            <geom name="dew_geom_RB" type="mesh" mesh="dew_right"/>
+                            <inertial mass="0.014545966318095172" pos="0 0.0033725329098671123 0.003994656620903565"
+                                    fullinertia="9.503542221457631e-07 1.1224087768184931e-06 3.3743300458966465e-07 0 0 -1.0569736991071184e-07"/>
+                            <site name="dew_l2_pivot_RB" pos="0 -0.01 0.019256484409503536" size="0.0015" rgba="0 1 0 1"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+
+    </worldbody>
+
+    <equality>
+        <connect name="loop1_closure" site1="shank_pivot" site2="lts_far_pivot" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+        <connect name="loop2_closure" site1="l2_dew_pivot" site2="dew_l2_pivot" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+    
+        <connect name="loop1_closure_BL" site1="shank_pivot_BL" site2="lts_far_pivot_BL" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+        <connect name="loop2_closure_BL" site1="l2_dew_pivot_BL" site2="dew_l2_pivot_BL" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+
+        <connect name="loop1_closure_RF" site1="shank_pivot_RF" site2="lts_far_pivot_RF" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+        <connect name="loop3_closure_RF" site1="l2_dew_pivot_RF" site2="dew_l2_pivot_RF" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+
+        <connect name="loop1_closure_RB" site1="shank_pivot_RB" site2="lts_far_pivot_RB" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+        <connect name="loop3_closure_RB" site1="l2_dew_pivot_RB" site2="dew_l2_pivot_RB" solref="0.005 1" solimp="0.95 0.99 0.001"/>
+    </equality>
+
+    <sensor>
+        <jointpos name="left_thigh_pos_F" joint="hip_drive_joint"/>
+        <jointvel name="left_thigh_vel_F" joint="hip_drive_joint"/>
+
+        <jointpos name="left_shank_pos_F" joint="dew_drive_joint"/>
+        <jointvel name="left_shank_vel_F" joint="dew_drive_joint"/>
+
+        <jointpos name="left_thigh_pos_B" joint="hip_drive_joint_BL"/>
+        <jointvel name="left_thigh_vel_B" joint="hip_drive_joint_BL"/>
+
+        <jointpos name="left_shank_pos_B" joint="dew_drive_joint_BL"/>
+        <jointvel name="left_shank_vel_B" joint="dew_drive_joint_BL"/>
+
+
+        <jointpos name="right_thigh_pos_F" joint="hip_drive_joint_RF"/>
+        <jointvel name="right_thigh_vel_F" joint="hip_drive_joint_RF"/>
+
+        <jointpos name="right_shank_pos_F" joint="dew_drive_joint_RF"/>
+        <jointvel name="right_shank_vel_F" joint="dew_drive_joint_RF"/>
+
+        <jointpos name="right_thigh_pos_B" joint="hip_drive_joint_RB"/>
+        <jointvel name="right_thigh_vel_B" joint="hip_drive_joint_RB"/>
+
+        <jointpos name="right_shank_pos_B" joint="dew_drive_joint_RB"/>
+        <jointvel name="right_shank_vel_B" joint="dew_drive_joint_RB"/>
+
+        <accelerometer name="imu_accel" site="imu_site"/>
+        <gyro name="imu_gyro" site="imu_site"/>
+
+        <touch name="foot_LF_touch" site="foot_contact_LF"/>
+        <touch name="foot_LB_touch" site="foot_contact_BL"/>
+        <touch name="foot_RF_touch" site="foot_contact_RF"/>
+        <touch name="foot_RB_touch" site="foot_contact_RB"/>
+        
+    </sensor>
+    <actuator>
+        <position name="LF_hip_actuator" joint="hip_drive_joint" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+        <position name="LF_dew_actuator" joint="dew_drive_joint" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+    
+        <position name="BL_hip_actuator" joint="hip_drive_joint_BL" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+        <position name="BL_dew_actuator" joint="dew_drive_joint_BL" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+
+        <position name="RF_hip_actuator" joint="hip_drive_joint_RF" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+        <position name="RF_dew_actuator" joint="dew_drive_joint_RF" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+    
+        <position name="RB_hip_actuator" joint="hip_drive_joint_RB" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+        <position name="RB_dew_actuator" joint="dew_drive_joint_RB" kp="15" kv="0.5" ctrlrange="-0.7 0.7" forcerange="-1.9 1.9"/>
+    </actuator>
+</mujoco>
